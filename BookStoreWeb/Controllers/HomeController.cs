@@ -5,9 +5,14 @@ namespace BookStoreWeb.Controllers
     public class HomeController : Controller
     {
         // GET
-        public string Index()
+        public IActionResult Index()
         {
-            return "Hell";
+            return View();
+        }
+
+        public IActionResult AboutUs()
+        {
+            return View();
         }
     }
 }

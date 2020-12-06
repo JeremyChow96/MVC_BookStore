@@ -17,6 +17,13 @@ namespace BookStoreWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+            });
+#if DEBUG
+            
+#endif
 
         }
 
@@ -28,8 +35,7 @@ namespace BookStoreWeb
                 app.UseDeveloperExceptionPage();
             }
 
- 
-
+            app.UseStaticFiles();
 
             app.UseRouting();
 
