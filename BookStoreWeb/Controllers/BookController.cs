@@ -14,12 +14,14 @@ namespace BookStoreWeb.Controllers
         // GET
         public IActionResult GetAllBooks()
         {
-            return View();
+            var data = _bookRepository.GetAllBooks();
+            return View(data);
         }
-
+        [Route("book-detail/{id}",Name = "bookDetailRoute")]
         public IActionResult GetBook(int id)
         {
-            return View();
+            var data = _bookRepository.GetBook(id);
+            return View(data);
         }
 
         public IActionResult SearchBook(string title, string authorName)

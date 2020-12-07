@@ -22,9 +22,8 @@ namespace BookStoreWeb
                 options.LowercaseUrls = true;
             });
 #if DEBUG
-            
+            services.AddRazorPages().AddRazorRuntimeCompilation();
 #endif
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,10 +37,13 @@ namespace BookStoreWeb
             app.UseStaticFiles();
 
             app.UseRouting();
-
+         
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+               endpoints.MapDefaultControllerRoute();
+              //endpoints.MapControllerRoute(
+              //    name: "Default",
+              //    pattern: "bookstore/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

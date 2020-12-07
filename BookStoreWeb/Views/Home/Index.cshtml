@@ -1,20 +1,77 @@
 ﻿@{
-    Layout = null;
+    ViewData["Title"] = "Home";
+    var data = ViewBag.Data;
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/css/Site.css" rel="stylesheet" />
-</head>
-<body  class="container">
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1> Welcome to Bookstore! = @ViewData["CustomProperty"] </h1>
+        <p class="lead text-muted">
+           @ViewData["Name"] <br/>
+            my first web store mvc web application learning!
+        </p>
+        <p>
+            <a href="#" class="btn btn-primary my-2">Search books</a>
+        </p>
+    </div>
+</section>
 
-<img src="~/images/logo.png" class="logo" alt="logo" />
 
-    <h1 class="h1"> This is a HomePage!</h1>
-    <h3>My email ----11111@qq.com</h3>
-</body>
-</html>
+<div class="py-5 bg-light">
+    <div class="container">
+        <h3 class="h3">Top books</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <svg class=" card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+                    <div class="card-body">
+                        <p class="card-text"> This section will be used to display the short description of book </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-sm btn-outline-secondary">View details</a>
+                            </div>
+                            <small class="text-muted">Author name</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <svg class=" card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+               
+                    <div class="card-body">
+                        <p class="card-text"> This section will be used to display the short description of book </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-sm btn-outline-secondary">View details</a>
+                            </div>
+                            <small class="text-muted">Author name</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <svg class=" card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+               
+                    <div class="card-body">
+                        <p class="card-text"> This section will be used to display the short description of book </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-sm btn-outline-secondary">View details</a>
+                            </div>
+                            <small class="text-muted">Author name</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@section scripts{
+  
+}*@

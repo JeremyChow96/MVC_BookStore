@@ -24,12 +24,11 @@ namespace BookStoreWeb.Repository
         {
             return new List<BookModel>()
             {
-                new BookModel(){Id=1, Title = "1", Author = "1", Category = "1"},
-                new BookModel(){Id=2, Title = "2", Author = "2", Category = "2"},
-                new BookModel(){Id=3, Title = "3", Author = "3", Category = "3"},
-                new BookModel(){Id=4, Title = "4", Author = "4", Category = "4"},
-                new BookModel(){Id=5, Title = "5", Author = "5", Category = "5"},
-
+                new BookModel(){Id=1, Title = "1", Author = "1", Category = "1",Description = "1111",Language = "Zh",TotalPages = 100},
+                new BookModel(){Id=2, Title = "2", Author = "2", Category = "2",Description = "2222",Language = "Zh",TotalPages = 100},
+                new BookModel(){Id=3, Title = "3", Author = "3", Category = "3",Description = "3333",Language = "Zh",TotalPages = 100},
+                new BookModel(){Id=4, Title = "4", Author = "4", Category = "4",Description = "4444",Language = "Zh",TotalPages = 100},
+                new BookModel(){Id=5, Title = "5", Author = "5", Category = "5",Description = "5555",Language = "Zh",TotalPages = 100},
 
             };
     }
