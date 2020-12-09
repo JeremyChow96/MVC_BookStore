@@ -6,6 +6,13 @@
 <section class="jumbotron text-center">
     <div class="container">
         <h1> Welcome to Bookstore! = @ViewData["CustomProperty"] </h1>
+        <environment names="Development">
+            <h3>Development</h3>
+        </environment>
+        <environment names="Production">
+            <h3>Production</h3>
+        </environment>
+
         <p class="lead text-muted">
            @ViewData["Name"] <br/>
             my first web store mvc web application learning!

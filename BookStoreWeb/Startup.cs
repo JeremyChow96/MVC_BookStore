@@ -7,6 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookStoreWeb.Data;
+using BookStoreWeb.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStoreWeb
 {
@@ -16,6 +19,9 @@ namespace BookStoreWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BookStoreContext>(options=>
+                options.UseMySql("Server=127.0.0.1;port=3306;Database=BookStore_f;uid=root;pwd=Zhoujj@123!;Character Set=utf8;"));
+            
             services.AddControllersWithViews();
             services.AddRouting(options =>
             {
@@ -24,6 +30,7 @@ namespace BookStoreWeb
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
 #endif
+            services.AddScoped<BookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
