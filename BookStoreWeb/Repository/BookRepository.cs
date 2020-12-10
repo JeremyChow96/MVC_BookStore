@@ -16,7 +16,8 @@ namespace BookStoreWeb.Repository
         {
             _context = context;
         }
-        public  async Task<int> AddNewBook(BookModel model)
+
+        public async Task<int> AddNewBook(BookModel model)
         {
             var book = new Books()
             {
@@ -24,20 +25,22 @@ namespace BookStoreWeb.Repository
                 CreateOn = DateTime.UtcNow,
                 Description = model.Description,
                 Title = model.Title,
-                TotalPages = model.TotalPages.HasValue?model.TotalPages.Value:0,
+                LanguageId = model.LanguageId,
+                TotalPages = model.TotalPages.HasValue ? model.TotalPages.Value : 0,
                 UpdateOn = DateTime.UtcNow
             };
-            
-          await    _context.Books.AddAsync(book);;
-          await    _context.SaveChangesAsync();
-             return book.Id;
+
+            await _context.Books.AddAsync(book);
+            ;
+            await _context.SaveChangesAsync();
+            return book.Id;
         }
 
         public async Task<List<BookModel>> GetAllBooks()
         {
             var books = new List<BookModel>();
             var allbooks = await _context.Books.ToListAsync();
-            if (allbooks?.Any()==true)
+            if (allbooks?.Any() == true)
             {
                 foreach (var book in allbooks)
                 {
@@ -48,11 +51,12 @@ namespace BookStoreWeb.Repository
                         Description = book.Description,
                         Category = book.Category,
                         Id = book.Id,
-                        Language = book.Language,
+                        LanguageId = book.LanguageId,
                         TotalPages = book.TotalPages
                     });
                 }
             }
+
             return books;
         }
 
@@ -68,7 +72,7 @@ namespace BookStoreWeb.Repository
                     Description = book.Description,
                     Category = book.Category,
                     Id = book.Id,
-                    Language = book.Language,
+                    LanguageId = book.LanguageId,
                     TotalPages = book.TotalPages
                 };
                 return bookDetails;
@@ -78,22 +82,23 @@ namespace BookStoreWeb.Repository
             // return   await _context.Books.Where(c=>c.Id==id).FirstOrDefaultAsync();
         }
 
-        public List<BookModel> SearchBook(string titile,string authorName)
+        public List<BookModel> SearchBook(string titile, string authorName)
         {
             return DataSouce().Where(c => c.Title.Contains(titile) || c.Author.Contains(authorName)).ToList();
         }
 
         private List<BookModel> DataSouce()
         {
-            return new List<BookModel>()
-            {
-                new BookModel(){Id=1, Title = "1", Author = "1", Category = "1",Description = "1111",Language = "Zh",TotalPages = 100},
-                new BookModel(){Id=2, Title = "2", Author = "2", Category = "2",Description = "2222",Language = "Zh",TotalPages = 100},
-                new BookModel(){Id=3, Title = "3", Author = "3", Category = "3",Description = "3333",Language = "Zh",TotalPages = 100},
-                new BookModel(){Id=4, Title = "4", Author = "4", Category = "4",Description = "4444",Language = "Zh",TotalPages = 100},
-                new BookModel(){Id=5, Title = "5", Author = "5", Category = "5",Description = "5555",Language = "Zh",TotalPages = 100},
+            //return new List<BookModel>()
+            //{
+            //    new BookModel(){Id=1, Title = "1", Author = "1", Category = "1",Description = "1111",LanguageId = "Zh",TotalPages = 100},
+            //    new BookModel(){Id=2, Title = "2", Author = "2", Category = "2",Description = "2222",LanguageId = "Zh",TotalPages = 100},
+            //    new BookModel(){Id=3, Title = "3", Author = "3", Category = "3",Description = "3333",LanguageId = "Zh",TotalPages = 100},
+            //    new BookModel(){Id=4, Title = "4", Author = "4", Category = "4",Description = "4444",LanguageId = "Zh",TotalPages = 100},
+            //    new BookModel(){Id=5, Title = "5", Author = "5", Category = "5",Description = "5555",LanguageId = "Zh",TotalPages = 100},
 
-            };
-    }
+            //};
+            return null;
+        }
     }
 }

@@ -1,9 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BookStoreWeb.EnumList;
 
 namespace BookStoreWeb.Models
 {
     public class BookModel
     {
+        [DataType(DataType.DateTime)]
+        [Display(Name="Custom Name")]
+        public string Myfield { get; set; }
+
         public int Id { get; set; }
 
         [StringLength(100,MinimumLength = 5)]
@@ -21,6 +26,9 @@ namespace BookStoreWeb.Models
         [Display(Name = "Total Pages of book")]
         public int? TotalPages { get; set; }
 
-        public string Language { get; set; }
+        public int LanguageId { get; set; }
+
+        //[Required(ErrorMessage = "选择语言ok不")]
+        //public LanguageEnum LanguageEnum { get; set; }
     }
 }
