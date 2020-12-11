@@ -2,16 +2,19 @@
 using BookStoreWeb.Models;
 using BookStoreWeb.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookStoreWeb.Controllers
 {
     public class BookController : Controller
     {
         private readonly BookRepository _bookRepository = null;
+        private readonly LanguageRepository _languageRepository = null;
 
-        public BookController(BookRepository bookRepository)
+        public BookController(BookRepository bookRepository, LanguageRepository languageRepository)
         {
             _bookRepository = bookRepository;
+            _languageRepository = languageRepository;
         }
 
         // GET
@@ -33,8 +36,16 @@ namespace BookStoreWeb.Controllers
             return View();
         }
 
-        public IActionResult AddNewBook(bool isSuccess = false, int bookId = 0)
+        public async Task<IActionResult> AddNewBook(bool isSuccess = false, int bookId = 0)
         {
+            var model = new BookModel()
+            {
+
+            };
+
+            ViewBag.Language = new SelectList(await _languageRepository.GetLanguages(),"Id", "Description");  
+
+
             ViewBag.IsSuccess = isSuccess;
             ViewBag.BookId = bookId;
             return View();
@@ -51,8 +62,11 @@ namespace BookStoreWeb.Controllers
                     return RedirectToAction(nameof(AddNewBook), new {isSuccess = true, bookId = id});
                 }
             }
-            ModelState.AddModelError("","This is my custom error message");
-     
+            // ModelState.AddModelError("","This is my custom error message");
+            ViewBag.Language = new SelectList(await _languageRepository.GetLanguages(), "Id", "Description");
+
+
+
             return View();
         }
     }

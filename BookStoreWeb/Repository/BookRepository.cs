@@ -38,34 +38,26 @@ namespace BookStoreWeb.Repository
 
         public async Task<List<BookModel>> GetAllBooks()
         {
-            var books = new List<BookModel>();
-            var allbooks = await _context.Books.ToListAsync();
-            if (allbooks?.Any() == true)
-            {
-                foreach (var book in allbooks)
-                {
-                    books.Add(new BookModel()
-                    {
-                        Author = book.Author,
-                        Title = book.Title,
-                        Description = book.Description,
-                        Category = book.Category,
-                        Id = book.Id,
-                        LanguageId = book.LanguageId,
-                        TotalPages = book.TotalPages
-                    });
-                }
-            }
 
-            return books;
+            return await _context.Books.Select(book => new BookModel()
+            {
+                Author = book.Author,
+                Title = book.Title,
+                Description = book.Description,
+                Category = book.Category,
+                Id = book.Id,
+                LanguageId = book.LanguageId,
+                Language = book.Language.Name,
+                TotalPages = book.TotalPages
+            }).ToListAsync();
+            //return await _context.Books.Select(book);
         }
 
         public async Task<BookModel> GetBookById(int id)
         {
-            var book = await _context.Books.FindAsync(id);
-            if (book != null)
-            {
-                var bookDetails = new BookModel()
+            //利用Select语句 使用外键
+            var book = await _context.Books.Where(x => x.Id == id)
+                .Select(book => new BookModel()
                 {
                     Author = book.Author,
                     Title = book.Title,
@@ -73,12 +65,12 @@ namespace BookStoreWeb.Repository
                     Category = book.Category,
                     Id = book.Id,
                     LanguageId = book.LanguageId,
+                    Language = book.Language.Name,
                     TotalPages = book.TotalPages
-                };
-                return bookDetails;
-            }
+                }).FirstOrDefaultAsync();
+           
 
-            return null;
+            return book;
             // return   await _context.Books.Where(c=>c.Id==id).FirstOrDefaultAsync();
         }
 

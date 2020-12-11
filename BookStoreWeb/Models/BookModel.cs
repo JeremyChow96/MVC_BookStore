@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BookStoreWeb.EnumList;
+using BookStoreWeb.Helper;
 
 namespace BookStoreWeb.Models
 {
@@ -11,8 +12,9 @@ namespace BookStoreWeb.Models
 
         public int Id { get; set; }
 
-        [StringLength(100,MinimumLength = 5)]
-        [Required(ErrorMessage = "Please enter the title of book")]
+        //[StringLength(100,MinimumLength = 5)]
+        //[Required(ErrorMessage = "Please enter the title of book")]
+        [MyCustomValidation(txt:"oooo",ErrorMessage = "custom error msg")]
         public string Title { get; set; }
         [Required(ErrorMessage = "Please enter the author name")]
 
@@ -22,12 +24,13 @@ namespace BookStoreWeb.Models
 
         public string Description { get; set; }
         
+        public int LanguageId { get; set; }
+
+        public string Language { get; set; }
+
         [Required(ErrorMessage = "Please enter the total pages")]
         [Display(Name = "Total Pages of book")]
         public int? TotalPages { get; set; }
-
-        public int LanguageId { get; set; }
-
         //[Required(ErrorMessage = "选择语言ok不")]
         //public LanguageEnum LanguageEnum { get; set; }
     }

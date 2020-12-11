@@ -52,7 +52,8 @@
 
     <div class="form-group">
         <label asp-for="LanguageId" ></label>
-        <select asp-for="LanguageId" class="form-control" asp-items="Html.GetEnumSelectList<LanguageEnum>()" >
+        @* asp-items="Html.GetEnumSelectList<LanguageEnum>() *@
+        <select asp-for="LanguageId" class="form-control" asp-items="@ViewBag.Language" >   
              <option value="">Please select the language</option> 
              @* <option value="Chinese">Chinese (One of the best language)</option>  *@
              @* <option  value="English">English (Global language)</option>  *@
