@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookStoreWeb.Data
@@ -6,7 +8,6 @@ namespace BookStoreWeb.Data
     public class Books
     {
         public int Id { get; set; }
-
 
         public string Title { get; set; }
  
@@ -20,10 +21,16 @@ namespace BookStoreWeb.Data
 
         public int TotalPages { get; set; }
 
+        public string CoverImageUrl{ get; set; }
+
+        public string BookPdfUrl { get; set; }
+
         public DateTime? CreateOn { get; set; }
 
         public DateTime? UpdateOn { get; set; }
 
         public Language Language { get; set; }
+
+        public  ICollection<BookGallery> bookGallery { get; set; }
     }
 }

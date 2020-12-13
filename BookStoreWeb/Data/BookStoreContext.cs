@@ -10,6 +10,8 @@ namespace BookStoreWeb.Data
 
         public DbSet<Books> Books { get; set; } // column name -- Books
         public DbSet<Language> Language { get; set; }
+        public DbSet<BookGallery> BookGallery { get; set; }
+
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         // {

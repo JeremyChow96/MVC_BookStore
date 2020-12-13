@@ -1,6 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Pipes;
+using System.Threading.Tasks;
 using BookStoreWeb.Models;
 using BookStoreWeb.Repository;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -8,13 +14,19 @@ namespace BookStoreWeb.Controllers
 {
     public class BookController : Controller
     {
-        private readonly BookRepository _bookRepository = null;
-        private readonly LanguageRepository _languageRepository = null;
+        private readonly BookRepository _bookRepository;
+        private readonly LanguageRepository _languageRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public BookController(BookRepository bookRepository, LanguageRepository languageRepository)
+
+        public BookController(BookRepository bookRepository, 
+            LanguageRepository languageRepository,
+            IWebHostEnvironment webHostEnvironment)
         {
+       
             _bookRepository = bookRepository;
             _languageRepository = languageRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET
@@ -56,6 +68,35 @@ namespace BookStoreWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (bookModel.CoverPhoto!=null)
+                {
+                    string folder = "books/cover/";
+                 bookModel.CoverImageUrl   = await UploadFile(folder,bookModel.CoverPhoto);
+                }
+
+
+                if (bookModel.GalleryFiles != null)
+                {
+                    bookModel.Gallery = new List<GalleryModel>();
+                    string folder = "books/gallery/";
+                    foreach (var file in bookModel.GalleryFiles)
+                    {
+                        var gallery = new GalleryModel()
+                        {
+                            Name = file.Name,
+                            URL = await UploadFile(folder, file)
+                        };
+                        bookModel.Gallery.Add(gallery);
+                    }
+                }
+
+
+                if (bookModel.BookPdf != null)
+                {
+                    string folder = "books/pdf/";
+                    bookModel.BookPdfUrl = await UploadFile(folder, bookModel.BookPdf);
+                }
+
                 var id = await _bookRepository.AddNewBook(bookModel);
                 if (id > 0)
                 {
@@ -68,6 +109,23 @@ namespace BookStoreWeb.Controllers
 
 
             return View();
+        }
+
+        private async Task<string> UploadFile(string folderPath,IFormFile file)
+        {
+
+            folderPath += Guid.NewGuid() + "_" + file.FileName;
+      
+            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
+
+            //if (!Directory.Exists(Path.GetDirectoryName(serverFolder)))
+            //{
+            //    Directory.CreateDirectory(Path.GetDirectoryName(serverFolder));
+            //}
+
+            await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+
+            return "/" + folderPath;
         }
     }
 }

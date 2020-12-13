@@ -27,11 +27,25 @@ namespace BookStoreWeb.Repository
                 Title = model.Title,
                 LanguageId = model.LanguageId,
                 TotalPages = model.TotalPages.HasValue ? model.TotalPages.Value : 0,
-                UpdateOn = DateTime.UtcNow
+                UpdateOn = DateTime.UtcNow,
+                CoverImageUrl = model.CoverImageUrl,
+                BookPdfUrl = model.BookPdfUrl
+
             };
 
+            book.bookGallery = new List<BookGallery>();
+        //    var gallery = new List<BookGallery>();
+
+            foreach (var file in model.Gallery)
+            {
+                book.bookGallery.Add(new BookGallery()
+                {
+                    Name = file.Name,
+                    URL = file.URL,
+                });
+            }
+
             await _context.Books.AddAsync(book);
-            ;
             await _context.SaveChangesAsync();
             return book.Id;
         }
@@ -48,8 +62,30 @@ namespace BookStoreWeb.Repository
                 Id = book.Id,
                 LanguageId = book.LanguageId,
                 Language = book.Language.Name,
-                TotalPages = book.TotalPages
+                TotalPages = book.TotalPages,
+                CoverImageUrl = book.CoverImageUrl,
+                BookPdfUrl =  book.BookPdfUrl
+                
             }).ToListAsync();
+            //return await _context.Books.Select(book);
+        }
+
+
+        public async Task<List<BookModel>> GetTopBooksAsync(int count)
+        {
+
+            return await _context.Books.Select(book => new BookModel()
+            {
+                Author = book.Author,
+                Title = book.Title,
+                Description = book.Description,
+                Category = book.Category,
+                Id = book.Id,
+                LanguageId = book.LanguageId,
+                Language = book.Language.Name,
+                TotalPages = book.TotalPages,
+                CoverImageUrl = book.CoverImageUrl,
+            }).Take(count).ToListAsync();
             //return await _context.Books.Select(book);
         }
 
@@ -66,7 +102,15 @@ namespace BookStoreWeb.Repository
                     Id = book.Id,
                     LanguageId = book.LanguageId,
                     Language = book.Language.Name,
-                    TotalPages = book.TotalPages
+                    TotalPages = book.TotalPages,
+                    CoverImageUrl = book.CoverImageUrl,
+                    BookPdfUrl = book.BookPdfUrl,
+                    Gallery = book.bookGallery.Select(g => new GalleryModel()
+                    {
+                        Id = g.Id,
+                        Name = g.Name,
+                        URL = g.URL,
+                    }).ToList()
                 }).FirstOrDefaultAsync();
            
 

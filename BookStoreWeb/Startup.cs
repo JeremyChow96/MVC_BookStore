@@ -29,6 +29,13 @@ namespace BookStoreWeb
             });
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            //  disable  client side Validation 
+            //     .AddViewOptions(option =>
+            // {
+            //     option.HtmlHelperOptions.ClientValidationEnabled = false;
+            // });
+
 #endif
             services.AddScoped<BookRepository, BookRepository>();
             services.AddScoped<LanguageRepository, LanguageRepository>();
