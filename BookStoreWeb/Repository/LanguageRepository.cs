@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookStoreWeb.Repository
 {
-    public class LanguageRepository
+    public class LanguageRepository : ILanguageRepository
     {
         private readonly BookStoreContext _context = null;
 

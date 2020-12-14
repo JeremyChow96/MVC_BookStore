@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookStoreWeb.Data;
 using BookStoreWeb.Repository;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStoreWeb
@@ -19,14 +20,12 @@ namespace BookStoreWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BookStoreContext>(options=>
-                options.UseMySql("Server=127.0.0.1;port=3306;Database=BookStore_f;uid=root;pwd=Zhoujj@123!;Character Set=utf8;"));
-            
+            services.AddDbContext<BookStoreContext>(options =>
+                options.UseMySql(
+                    "Server=127.0.0.1;port=3306;Database=BookStore_f;uid=root;pwd=Zhoujj@123!;Character Set=utf8;"));
+
             services.AddControllersWithViews();
-            services.AddRouting(options =>
-            {
-                options.LowercaseUrls = true;
-            });
+            services.AddRouting(options => { options.LowercaseUrls = true; });
 #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
@@ -37,10 +36,11 @@ namespace BookStoreWeb
             // });
 
 #endif
-            services.AddScoped<BookRepository, BookRepository>();
-            services.AddScoped<LanguageRepository, LanguageRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
         }
 
+    
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -52,13 +52,14 @@ namespace BookStoreWeb
             app.UseStaticFiles();
 
             app.UseRouting();
-         
+
             app.UseEndpoints(endpoints =>
             {
-               endpoints.MapDefaultControllerRoute();
-              //endpoints.MapControllerRoute(
-              //    name: "Default",
-              //    pattern: "bookstore/{controller=Home}/{action=Index}/{id?}");
+              //  endpoints.MapControllers(); //without specifying any routes.
+                endpoints.MapDefaultControllerRoute();
+                //endpoints.MapControllerRoute(
+                //    name: "Default",
+                //    pattern: "bookstore/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookStoreWeb.Repository
 {
-    public class BookRepository
+    public class BookRepository : IBookRepository
     {
         private readonly BookStoreContext _context = null;
 
@@ -123,7 +123,7 @@ namespace BookStoreWeb.Repository
             return DataSouce().Where(c => c.Title.Contains(titile) || c.Author.Contains(authorName)).ToList();
         }
 
-        private List<BookModel> DataSouce()
+        public List<BookModel> DataSouce()
         {
             //return new List<BookModel>()
             //{

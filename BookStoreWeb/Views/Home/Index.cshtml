@@ -2,6 +2,7 @@
     ViewData["Title"] = "Home";
     var data = ViewBag.Data;
 }
+@inject BookStoreWeb.Repository.IBookRepository _bookRepository
 
 <section class="jumbotron text-center">
     <div class="container">
@@ -20,6 +21,10 @@
         <p>
             <a href="#" class="btn btn-primary my-2">Search books</a>
         </p>
+        @foreach (var item in await _bookRepository.GetAllBooks())
+        {
+            <h2>@item.Title</h2>
+        }
     </div>
 </section>
 

@@ -14,13 +14,13 @@ namespace BookStoreWeb.Controllers
 {
     public class BookController : Controller
     {
-        private readonly BookRepository _bookRepository;
-        private readonly LanguageRepository _languageRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly ILanguageRepository _languageRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
 
-        public BookController(BookRepository bookRepository, 
-            LanguageRepository languageRepository,
+        public BookController(IBookRepository bookRepository, 
+            ILanguageRepository languageRepository,
             IWebHostEnvironment webHostEnvironment)
         {
        
@@ -36,7 +36,7 @@ namespace BookStoreWeb.Controllers
             return View(data);
         }
 
-        [Route("book-detail/{id}", Name = "bookDetailRoute")]
+        [Route("book-detail/{id:int:min(1)}", Name = "bookDetailRoute")]
         public async Task<IActionResult> GetBook(int id)
         {
             var data = await _bookRepository.GetBookById(id);
@@ -127,5 +127,8 @@ namespace BookStoreWeb.Controllers
 
             return "/" + folderPath;
         }
+
+        //route attribute :1 .alpha:minlength(5):regex()
+        //
     }
 }

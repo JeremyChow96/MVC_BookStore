@@ -3,11 +3,14 @@ using System.Dynamic;
 
 namespace BookStoreWeb.Controllers
 {
+    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         [ViewData]
         public string CustomProperty { get; set; }
         // GET
+        [Route("~/")]
+     
         public IActionResult Index()
         {
             // ViewBag.Title = "  Jeremy!";
@@ -20,11 +23,14 @@ namespace BookStoreWeb.Controllers
             return View();
         }
 
-        public IActionResult AboutUs()
+        [Route("~/{controller}/about-us/{id}")]
+     
+        public IActionResult AboutUs(int id)
         {
             return View();
         }
 
+        [Route("~/{controller}/contact-us")]  //override route
         public IActionResult ContactUs()
         {
             return View();
