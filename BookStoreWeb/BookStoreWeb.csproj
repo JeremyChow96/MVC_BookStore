@@ -4,20 +4,20 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Migrations\20201209123107_InitBookstore.cs" />
-    <Compile Remove="Migrations\20201209123107_InitBookstore.Designer.cs" />
-    <Compile Remove="Migrations\20201209123534_addtwocolumns.cs" />
-    <Compile Remove="Migrations\20201209123534_addtwocolumns.Designer.cs" />
-    <Compile Remove="Migrations\20201210151125_AddedLanguageTable.cs" />
-    <Compile Remove="Migrations\20201210151125_AddedLanguageTable.Designer.cs" />
-    <Compile Remove="Migrations\20201210152338_addlanguage.cs" />
-    <Compile Remove="Migrations\20201210152338_addlanguage.Designer.cs" />
-    <Compile Remove="Migrations\20201210152428_languageTableAdded.cs" />
-    <Compile Remove="Migrations\20201210152428_languageTableAdded.Designer.cs" />
-    <Compile Remove="Migrations\20201210153054_addColumn.cs" />
-    <Compile Remove="Migrations\20201210153054_addColumn.Designer.cs" />
-  </ItemGroup>
+   <ItemGroup> 
+     <Compile Remove="Migrations\20201209123107_InitBookstore.cs" /> 
+     <Compile Remove="Migrations\20201209123107_InitBookstore.Designer.cs" /> 
+     <Compile Remove="Migrations\20201209123534_addtwocolumns.cs" /> 
+     <Compile Remove="Migrations\20201209123534_addtwocolumns.Designer.cs" /> 
+     <Compile Remove="Migrations\20201210151125_AddedLanguageTable.cs" /> 
+     <Compile Remove="Migrations\20201210151125_AddedLanguageTable.Designer.cs" /> 
+     <Compile Remove="Migrations\20201210152338_addlanguage.cs" /> 
+     <Compile Remove="Migrations\20201210152338_addlanguage.Designer.cs" /> 
+     <Compile Remove="Migrations\20201210152428_languageTableAdded.cs" /> 
+     <Compile Remove="Migrations\20201210152428_languageTableAdded.Designer.cs" /> 
+     <Compile Remove="Migrations\20201210153054_addColumn.cs" /> 
+     <Compile Remove="Migrations\20201210153054_addColumn.Designer.cs" /> 
+   </ItemGroup> 
 
   <ItemGroup>
     <Folder Include="wwwroot\books\cover\" />
@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
       <PrivateAssets>all</PrivateAssets>

@@ -5,16 +5,19 @@ using System.Threading.Tasks;
 using BookStoreWeb.Data;
 using BookStoreWeb.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BookStoreWeb.Repository
 {
     public class BookRepository : IBookRepository
     {
         private readonly BookStoreContext _context = null;
+        private readonly IConfiguration _iConfiguration;
 
-        public BookRepository(BookStoreContext context)
+        public BookRepository(BookStoreContext context,IConfiguration iConfiguration)
         {
             _context = context;
+            _iConfiguration = iConfiguration;
         }
 
         public async Task<int> AddNewBook(BookModel model)
