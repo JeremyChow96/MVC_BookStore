@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BookStoreWeb.Data;
+using BookStoreWeb.Helper;
 using BookStoreWeb.Models;
 using BookStoreWeb.Repository;
+using BookStoreWeb.Services;
+using Microsoft.AspNetCore.Hosting.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,8 +29,28 @@ namespace BookStoreWeb
         {
             services.AddDbContext<BookStoreContext>(options =>
                 options.UseMySql(_configuration.GetConnectionString("DefaultConnection")));
+       
+          //  services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
+            //Configure password complexity
+            services.Configure<IdentityOptions>(option =>
+            {
+                option.Password.RequiredLength = 5;
+                option.Password.RequiredUniqueChars = 1;
+                option.Password.RequireDigit = false;
+                option.Password.RequireLowercase = false;
+                option.Password.RequireNonAlphanumeric = false;
+                option.Password.RequireUppercase = false;
+            });
+
+            //Redirect user to login page
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = _configuration["Application:LoginPath"];
+            });
+
+
 
             services.AddControllersWithViews();
             services.AddRouting(options => { options.LowercaseUrls = true; });
@@ -45,8 +68,15 @@ namespace BookStoreWeb
             services.AddScoped<ILanguageRepository, LanguageRepository>();
 
             services.AddSingleton<IMessageRepository, MessageRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IUserService, UserService>();
 
             //IOptions works on singleton
+
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
+
+
+            services.Configure<NewBookAlertConfig>( _configuration.GetSection("NewBookAlert"));
 
             services.Configure<NewBookAlertConfig>("InternalBook",_configuration.GetSection("NewBookAlert"));
             // alert: this will override the previous configuration 
@@ -69,6 +99,9 @@ namespace BookStoreWeb
             app.UseRouting();
            
             app.UseAuthentication();
+
+            //Authorize attribute  to secure  an action method 
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
