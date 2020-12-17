@@ -31,7 +31,7 @@ namespace BookStoreWeb
                 options.UseMySql(_configuration.GetConnectionString("DefaultConnection")));
        
           //  services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<BookStoreContext>().AddDefaultTokenProviders();
 
             //Configure password complexity
             services.Configure<IdentityOptions>(option =>
@@ -42,6 +42,8 @@ namespace BookStoreWeb
                 option.Password.RequireLowercase = false;
                 option.Password.RequireNonAlphanumeric = false;
                 option.Password.RequireUppercase = false;
+
+                option.SignIn.RequireConfirmedEmail = true;
             });
 
             //Redirect user to login page
@@ -70,7 +72,7 @@ namespace BookStoreWeb
             services.AddSingleton<IMessageRepository, MessageRepository>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IUserService, UserService>();
-
+            services.AddScoped<IEmailService, EmailService>();
             //IOptions works on singleton
 
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
@@ -81,6 +83,8 @@ namespace BookStoreWeb
             services.Configure<NewBookAlertConfig>("InternalBook",_configuration.GetSection("NewBookAlert"));
             // alert: this will override the previous configuration 
             services.Configure<NewBookAlertConfig>("ThirdPartyBook",_configuration.GetSection("ThirdPartyBook"));
+
+            services.Configure<SMTPConfigModel>(_configuration.GetSection("SMTPConfig"));
 
 
         }

@@ -68,7 +68,14 @@ namespace BookStoreWeb.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                ModelState.AddModelError("","Invalid credentials");
+                if (result.IsNotAllowed)
+                {
+                    ModelState.AddModelError("", "Not allowed to login");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid credentials");
+                }
             }
             return View();
         }
@@ -78,6 +85,52 @@ namespace BookStoreWeb.Controllers
         {
             await _accountRepository.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+
+        [Route("change-password")]
+        public  IActionResult ChangePasswod()
+        {
+            return View();
+        }
+
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePasswod(ChangePasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _accountRepository.ChangePasswordAsync(model);
+                if (result.Succeeded)
+                {
+                    ViewBag.IsSuccess = true;
+                    ModelState.Clear();
+                    return View();
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("",error.Description);
+                }
+
+            }
+            return View(model);
+        }
+
+      //  [Route("confirm-email?uid={0}%token={1}")]
+      [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string uid, string token)
+        {
+            if (!string.IsNullOrEmpty(uid)&&!string.IsNullOrEmpty(token))
+            {
+                token = token.Replace(' ', '+');
+                var result = await _accountRepository.ConfirmEmaillAsync(uid, token);
+                if (result.Succeeded)
+                {
+                    ViewBag.IsSuccess = true;
+                }
+            }
+            return View();
         }
     }
 }

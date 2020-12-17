@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
+using System.Threading.Tasks;
 using BookStoreWeb.Models;
 using BookStoreWeb.Services;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +15,7 @@ namespace BookStoreWeb.Controllers
         private readonly IConfiguration _iConfiguration;
         private readonly IMessageRepository _messageRepository;
         private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
         private readonly NewBookAlertConfig newBookAlertConfig;
         private readonly NewBookAlertConfig thirdpartyBook;
 
@@ -20,11 +23,13 @@ namespace BookStoreWeb.Controllers
         //IOptionsSnapshot works on scoped
         //IOptions works on singleton
         public HomeController(IConfiguration iConfiguration, IOptionsSnapshot<NewBookAlertConfig> iOptions,
-            IMessageRepository messageRepository, IUserService userService)
+            IMessageRepository messageRepository, IUserService userService,
+            IEmailService emailService)
         {
             _iConfiguration = iConfiguration;
             _messageRepository = messageRepository;
             _userService = userService;
+            _emailService = emailService;
             // newBookAlertConfig = iOptions.Value;
             newBookAlertConfig = iOptions.Get("InternalBook");
             thirdpartyBook = iOptions.Get("ThirdPartyBook");
@@ -35,8 +40,17 @@ namespace BookStoreWeb.Controllers
 
         // GET
         [Route("~/")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
+            UserEmailOptions options =new UserEmailOptions()
+            {
+                ToEmails = new List<string>(){"a283164069@outlook.com"}
+            };
+
+      //      await _emailService.SendTestEmail(options);
+
+
             var userId = _userService.GetUserId();
             var isLoggedIn = _userService.IsAuthenticated();
 
