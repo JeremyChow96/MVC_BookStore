@@ -16,9 +16,9 @@ namespace BookStoreWeb.Services
 
         public async Task SendTestEmail(UserEmailOptions userEmailOptions)
         {
-            userEmailOptions.Subject = "This is a email test";
+            userEmailOptions.Subject = "This is a email test";  //邮箱主题
             // userEmailOptions.Body = GetEmailBody("TestEmail");
-            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("TestEmail"), userEmailOptions.PlaceHolders);
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("TestEmail"), userEmailOptions.PlaceHolders); //邮箱内容
 
             await SendEmail(userEmailOptions);
         }
@@ -75,7 +75,7 @@ namespace BookStoreWeb.Services
 
         private string UpdatePlaceHolders(string text, List<KeyValuePair<string, string>> keyValuePairs)
         {
-            if (string.IsNullOrEmpty(text)&&keyValuePairs!=null)
+            if (!string.IsNullOrEmpty(text)&&keyValuePairs!=null)
             {
                 foreach (var placeholder in keyValuePairs)
                 {

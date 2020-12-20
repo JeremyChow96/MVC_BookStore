@@ -43,6 +43,7 @@ namespace BookStoreWeb
                 option.Password.RequireNonAlphanumeric = false;
                 option.Password.RequireUppercase = false;
 
+                //” œ‰—È÷§µ«»Î
                 option.SignIn.RequireConfirmedEmail = true;
             });
 

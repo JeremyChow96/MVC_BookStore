@@ -24,6 +24,14 @@ namespace BookStoreWeb.Repository
             _emailService = emailService;
             _configuration = configuration;
         }
+
+        public async Task<ApplicationUser> GetUserByEmailAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+
+
         public async Task<IdentityResult> CreateUserAsync(SignUpUserModel userModel)
         {
             var user = new ApplicationUser()
@@ -37,15 +45,28 @@ namespace BookStoreWeb.Repository
            var result =  await _userManager.CreateAsync(user, userModel.Password);
            if (result.Succeeded)
            {
-               //Email confirm token
-               var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-               if (!string.IsNullOrEmpty(token))
-               {
-                   await SendEmailConfirmationEmail(user, token);
 
-               }
+               await GenerateEmailConfirmationTonkenAsync(user);
+               //Email confirm token
+               //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+               //if (!string.IsNullOrEmpty(token))
+               //{
+               //    await SendEmailConfirmationEmail(user, token);
+
+               //}
            }
            return result;
+        }
+
+
+
+        public async Task GenerateEmailConfirmationTonkenAsync(ApplicationUser user)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            if (!string.IsNullOrEmpty(token))
+            {
+                await SendEmailConfirmationEmail(user, token);
+            }
         }
 
         public async Task<SignInResult> PasswordSignInAsync(SignInModel signInModel)
@@ -70,7 +91,7 @@ namespace BookStoreWeb.Repository
             return await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
         }
 
-        public async Task<IdentityResult> ConfirmEmaillAsync(string uid,string token)
+        public async Task<IdentityResult> ConfirmEmailAsync(string uid,string token)
         {
             return await _userManager.ConfirmEmailAsync(await _userManager.FindByIdAsync(uid),token);
         }
@@ -87,6 +108,7 @@ namespace BookStoreWeb.Repository
                 PlaceHolders = new List<KeyValuePair<string, string>>()
                 {
                     new KeyValuePair<string, string>("{{UserName}}",user.FirstName),
+                    //Link  地址 + 路由
                     new KeyValuePair<string, string>("{{Link}}",string.Format(appdomain + confirmationLink,user.Id,token))
 
                 }

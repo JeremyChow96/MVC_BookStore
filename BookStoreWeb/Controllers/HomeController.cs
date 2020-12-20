@@ -43,12 +43,19 @@ namespace BookStoreWeb.Controllers
         public async Task<IActionResult> Index()
         {
 
-            UserEmailOptions options =new UserEmailOptions()
-            {
-                ToEmails = new List<string>(){"a283164069@outlook.com"}
-            };
+            //UserEmailOptions options =new UserEmailOptions()
+            //{
+            //    ToEmails = new List<string>(){"a283164069@outlook.com"},
+            //    PlaceHolders = new List<KeyValuePair<string, string>>()
+            //    {
+            //        new KeyValuePair<string, string>("{{UserName}}","Jeremy"),
+            //    }
+            //};
 
-      //      await _emailService.SendTestEmail(options);
+            //await _emailService.SendTestEmail(options);
+
+
+
 
 
             var userId = _userService.GetUserId();
