@@ -14,5 +14,9 @@ namespace BookStoreWeb.Repository
         Task GenerateEmailConfirmationTonkenAsync(ApplicationUser user);
 
         Task<ApplicationUser> GetUserByEmailAsync(string email);
+        //用来重置密码   发送邮件 -重置密码
+        Task GenerateForgotPasswordTonkenAsync(ApplicationUser user);
+        //
+        Task<IdentityResult> ResetPasswordAsync(ResetPasswordModel model);
     }
 }

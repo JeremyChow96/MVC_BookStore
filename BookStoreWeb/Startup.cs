@@ -106,15 +106,20 @@ namespace BookStoreWeb
             app.UseAuthentication();
 
             //Authorize attribute  to secure  an action method 
-            app.UseAuthorization();
+           app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
               //  endpoints.MapControllers(); //without specifying any routes.
                 endpoints.MapDefaultControllerRoute();
+               
                 //endpoints.MapControllerRoute(
                 //    name: "Default",
                 //    pattern: "bookstore/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "MyArea",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

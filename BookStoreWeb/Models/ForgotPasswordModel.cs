@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookStoreWeb.Repository
+namespace BookStoreWeb.Models
 {
     public class ForgotPasswordModel
     {

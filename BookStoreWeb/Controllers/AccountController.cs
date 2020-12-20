@@ -127,7 +127,7 @@ namespace BookStoreWeb.Controllers
 
         //  [Route("confirm-email?uid={0}%token={1}")]
         [HttpGet("confirm-email")]
-        public async Task<IActionResult> ConfirmEmail(string uid, string token,string email)
+        public async Task<IActionResult> ConfirmEmail(string uid, string token, string email)
         {
             EmailConfirmModel model = new EmailConfirmModel()
             {
@@ -140,8 +140,8 @@ namespace BookStoreWeb.Controllers
                 var result = await _accountRepository.ConfirmEmailAsync(uid, token);
                 if (result.Succeeded)
                 {
-                   // ViewBag.IsSuccess = true;
-                   model.EmailVerify = true;
+                    // ViewBag.IsSuccess = true;
+                    model.EmailVerify = true;
                 }
             }
 
@@ -174,12 +174,9 @@ namespace BookStoreWeb.Controllers
         }
 
 
-
-        [HttpPost("forget-password"),AllowAnonymous]
+        [HttpGet("forget-password"), AllowAnonymous]
         public async Task<IActionResult> ForgetPassword()
         {
-
-
             return View();
         }
 
@@ -188,7 +185,12 @@ namespace BookStoreWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                //查询邮箱是否已经被注册过！！
+                var user = await _accountRepository.GetUserByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    await _accountRepository.GenerateForgotPasswordTonkenAsync(user);
+                }
 
                 ModelState.Clear();
                 model.EmailSent = true;
@@ -196,6 +198,43 @@ namespace BookStoreWeb.Controllers
 
             return View(model);
         }
-    
-}
+
+
+        [HttpGet("reset-password"), AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(string uid,string token)
+        {
+            ResetPasswordModel model = new ResetPasswordModel()
+            {
+                UserId =  uid,
+                Token = token,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost("reset-password"), AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.Token = model.Token.Replace(' ', '+');
+
+                var result = await _accountRepository.ResetPasswordAsync(model);
+                if (result.Succeeded)
+                {
+
+                    ModelState.Clear();
+                    model.IsSuccess = true;
+                    return View(model);
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("",error.Description);
+                }
+
+            }
+            return View();
+        }
+    }
 }

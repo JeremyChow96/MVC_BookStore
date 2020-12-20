@@ -15,8 +15,8 @@ namespace BookStoreWeb.Repository
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
 
-        public AccountRepository(UserManager<ApplicationUser> userManager,SignInManager<ApplicationUser> signInManager,
-            IUserService userService,IEmailService emailService,IConfiguration configuration)
+        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            IUserService userService, IEmailService emailService, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -31,33 +31,31 @@ namespace BookStoreWeb.Repository
         }
 
 
-
         public async Task<IdentityResult> CreateUserAsync(SignUpUserModel userModel)
         {
             var user = new ApplicationUser()
             {
                 FirstName = userModel.FirstName,
-                LastName =  userModel.LastName,
-                Email =  userModel.Email,
+                LastName = userModel.LastName,
+                Email = userModel.Email,
                 UserName = userModel.Email
             };
-          
-           var result =  await _userManager.CreateAsync(user, userModel.Password);
-           if (result.Succeeded)
-           {
 
-               await GenerateEmailConfirmationTonkenAsync(user);
-               //Email confirm token
-               //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-               //if (!string.IsNullOrEmpty(token))
-               //{
-               //    await SendEmailConfirmationEmail(user, token);
+            var result = await _userManager.CreateAsync(user, userModel.Password);
+            if (result.Succeeded)
+            {
+                await GenerateEmailConfirmationTonkenAsync(user);
+                //Email confirm token
+                //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                //if (!string.IsNullOrEmpty(token))
+                //{
+                //    await SendEmailConfirmationEmail(user, token);
 
-               //}
-           }
-           return result;
+                //}
+            }
+
+            return result;
         }
-
 
 
         public async Task GenerateEmailConfirmationTonkenAsync(ApplicationUser user)
@@ -66,6 +64,15 @@ namespace BookStoreWeb.Repository
             if (!string.IsNullOrEmpty(token))
             {
                 await SendEmailConfirmationEmail(user, token);
+            }
+        }
+
+        public async Task GenerateForgotPasswordTonkenAsync(ApplicationUser user)
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            if (!string.IsNullOrEmpty(token))
+            {
+                await SendForgotpasswordEmail(user, token);
             }
         }
 
@@ -80,7 +87,7 @@ namespace BookStoreWeb.Repository
 
         public async Task SignOutAsync()
         {
-             await _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
         }
 
 
@@ -91,12 +98,18 @@ namespace BookStoreWeb.Repository
             return await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
         }
 
-        public async Task<IdentityResult> ConfirmEmailAsync(string uid,string token)
+        public async Task<IdentityResult> ConfirmEmailAsync(string uid, string token)
         {
-            return await _userManager.ConfirmEmailAsync(await _userManager.FindByIdAsync(uid),token);
+            return await _userManager.ConfirmEmailAsync(await _userManager.FindByIdAsync(uid), token);
         }
 
-        private async Task SendEmailConfirmationEmail(ApplicationUser user,string token)
+        public async Task<IdentityResult> ResetPasswordAsync(ResetPasswordModel model)
+        {
+            return await _userManager.ResetPasswordAsync(await _userManager.FindByIdAsync(model.UserId), model.Token,
+                model.NewPassword);
+        }
+
+        private async Task SendEmailConfirmationEmail(ApplicationUser user, string token)
         {
             string appdomain = _configuration.GetSection("Application:Appdomain").Value;
             string confirmationLink = _configuration.GetSection("Application:EmailConfirmation").Value;
@@ -104,19 +117,38 @@ namespace BookStoreWeb.Repository
 
             UserEmailOptions options = new UserEmailOptions()
             {
-                ToEmails = new List<string>() { user.Email },
+                ToEmails = new List<string>() {user.Email},
                 PlaceHolders = new List<KeyValuePair<string, string>>()
                 {
-                    new KeyValuePair<string, string>("{{UserName}}",user.FirstName),
+                    new KeyValuePair<string, string>("{{UserName}}", user.FirstName),
                     //Link  地址 + 路由
-                    new KeyValuePair<string, string>("{{Link}}",string.Format(appdomain + confirmationLink,user.Id,token))
-
+                    new KeyValuePair<string, string>("{{Link}}",
+                        string.Format(appdomain + confirmationLink, user.Id, token))
                 }
-
             };
 
-               await _emailService.SendEmailForConfirmation(options);
+            await _emailService.SendEmailForConfirmation(options);
+        }
 
+        private async Task SendForgotpasswordEmail(ApplicationUser user, string token)
+        {
+            string appdomain = _configuration.GetSection("Application:Appdomain").Value;
+            string confirmationLink = _configuration.GetSection("Application:ForgotPassword").Value;
+
+
+            UserEmailOptions options = new UserEmailOptions()
+            {
+                ToEmails = new List<string>() {user.Email},
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", user.FirstName),
+                    //Link  地址 + 路由
+                    new KeyValuePair<string, string>("{{Link}}",
+                        string.Format(appdomain + confirmationLink, user.Id, token))
+                }
+            };
+
+            await _emailService.SendEmailForForgoPassword(options);
         }
     }
 }
