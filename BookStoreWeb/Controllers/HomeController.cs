@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 using System.Threading.Tasks;
 using BookStoreWeb.Models;
 using BookStoreWeb.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace BookStoreWeb.Controllers
 {
-    [Route("[controller]/[action]")]
+   // [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly IConfiguration _iConfiguration;
@@ -39,7 +41,7 @@ namespace BookStoreWeb.Controllers
         [ViewData] public string CustomProperty { get; set; }
 
         // GET
-        [Route("~/")]
+      //  [Route("~/")]
         public async Task<IActionResult> Index()
         {
 
@@ -55,7 +57,9 @@ namespace BookStoreWeb.Controllers
             //await _emailService.SendTestEmail(options);
 
 
-
+            //var g1 = Guid.NewGuid();
+            //var g2 = Guid.NewGuid();
+            //var g3 = Guid.NewGuid();
 
 
             var userId = _userService.GetUserId();
@@ -98,9 +102,13 @@ namespace BookStoreWeb.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin,User")]  //确保只有登入账号才允许点击
         [Route("~/{controller}/contact-us")] //override route
         public IActionResult ContactUs()
         {
+
+
+
             return View();
         }
     }

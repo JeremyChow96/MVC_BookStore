@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace BookStoreWeb.Areas.Admin.Controllers
 {
-  
+  /// <summary>
+  /// introduce area  in mvc pattern
+  /// </summary>
     [Area("admin")]
+     [Route("admin/[controller]/[action]")]
     public class HomeController : Controller
     {
         // GET: HomeController

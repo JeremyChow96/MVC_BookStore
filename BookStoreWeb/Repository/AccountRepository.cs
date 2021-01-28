@@ -11,22 +11,26 @@ namespace BookStoreWeb.Repository
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
 
         public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            IUserService userService, IEmailService emailService, IConfiguration configuration)
+            IUserService userService, IEmailService emailService, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userService = userService;
             _emailService = emailService;
             _configuration = configuration;
+            _roleManager = roleManager;
         }
 
         public async Task<ApplicationUser> GetUserByEmailAsync(string email)
         {
+            //_userManager.AddToRoleAsync()
             return await _userManager.FindByEmailAsync(email);
         }
 
@@ -79,7 +83,8 @@ namespace BookStoreWeb.Repository
         public async Task<SignInResult> PasswordSignInAsync(SignInModel signInModel)
         {
             var result = await _signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password,
-                signInModel.RememberMe, false);
+                signInModel.RememberMe, true);
+            //默认情况下 5次错误 账号被锁
 
             return result;
         }

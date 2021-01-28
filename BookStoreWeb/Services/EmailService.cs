@@ -20,7 +20,7 @@ namespace BookStoreWeb.Services
             // userEmailOptions.Body = GetEmailBody("TestEmail");
             userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("TestEmail"), userEmailOptions.PlaceHolders); //邮箱内容
 
-            await SendEmail(userEmailOptions);
+            await SendEmailAsync(userEmailOptions);
         }
 
         public async Task SendEmailForConfirmation(UserEmailOptions userEmailOptions)
@@ -30,7 +30,7 @@ namespace BookStoreWeb.Services
             // userEmailOptions.Body = GetEmailBody("TestEmail");
             userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("EmailConfirm"), userEmailOptions.PlaceHolders);
 
-            await SendEmail(userEmailOptions);
+            await SendEmailAsync(userEmailOptions);
         }
 
         public async Task SendEmailForForgoPassword(UserEmailOptions userEmailOptions)
@@ -40,14 +40,14 @@ namespace BookStoreWeb.Services
             // userEmailOptions.Body = GetEmailBody("TestEmail");
             userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("ForgotPassword"), userEmailOptions.PlaceHolders);
 
-            await SendEmail(userEmailOptions);
+            await SendEmailAsync(userEmailOptions);
         }
 
         public EmailService(IOptions<SMTPConfigModel> smtpConfig)
         {
             _smtpConfig = smtpConfig.Value;
         }
-        private async Task SendEmail(UserEmailOptions userEmailOptions)
+        private async  Task SendEmailAsync(UserEmailOptions userEmailOptions)
         {
             MailMessage mail = new MailMessage
             {

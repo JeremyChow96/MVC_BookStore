@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,15 @@ namespace BookStoreWeb
 
                 //邮箱验证登入
                 option.SignIn.RequireConfirmedEmail = true;
+                // 设置登入次数限制
+                option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                option.Lockout.MaxFailedAccessAttempts = 3;
+            });
+
+            //Token 生命周期设置
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = TimeSpan.FromMinutes(20);
             });
 
             //Redirect user to login page
